@@ -66,6 +66,16 @@
             transition: stroke 0.3s;
         }
 
+        /* File input - invisible but functional on all platforms including Android */
+        #importFile {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: auto;
+        }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -123,7 +133,7 @@
                 <div class="mt-4">
                     <label class="w-full cursor-pointer text-left px-4 py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl font-medium text-sm flex items-center justify-between border border-slate-200">
                         <span id="importText">Import Data</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)">
+                        <input type="file" id="importFile" accept="application/json,.json" onchange="importData(event)">
                     </label>
                 </div>
                 <!-- Demo and Clear Data Buttons -->
