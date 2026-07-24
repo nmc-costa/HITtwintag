@@ -38,37 +38,41 @@ The main goal of this tool is to quickly generate structural labels and domain k
 The exported JSON structure looks like this:
 
 ```
-{  
-  "machines": \[  
-    {  
-      "id": "m1\_xyz",  
-      "name": "Lamination Press",  
-      "x": 150,  
-      "y": 200,  
-      "metadata": {  
-        "ID": "LAM\_01"  
-      },  
-      "categories": \[  
-        {  
-          "id": "cat\_1",  
-          "name": "Defect Type",  
-          "options": \["OK", "Bubble", "Misaligned"\],  
-          "events": \[  
-            {  
-              "timestamp": "2026-07-23T10:15:30.123Z",  
-              "value": "Bubble"  
-            }  
-          \]  
-        }  
-      \]  
-    }  
-  \],  
-  "connections": \[  
-    {  
-      "source": "m1\_xyz",  
-      "target": "m2\_abc"  
-    }  
-  \]  
+{
+  "nodes": [
+    {
+      "id": "m1_xyz",
+      "name": "Lamination Press",
+      "x": 150,
+      "y": 200,
+      "metadata": {
+        "ID": "LAM_01"
+      },
+      "categories": [
+        {
+          "id": "cat_1",
+          "name": "Defect Type",
+          "options": ["OK", "Bubble", "Misaligned"],
+          "events": [
+            {
+              "timestamp": "2026-07-24T10:15:30.123Z",
+              "value": "Bubble"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "m1_xyz",
+      "target": "m2_abc"
+    }
+  ],
+  "ui": {
+    "viewMode": "detail",
+    "focusedMachine": "m1_xyz"
+  }
 }
 ```
 

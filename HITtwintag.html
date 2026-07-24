@@ -819,31 +819,43 @@
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
+
             const reader = new FileReader();
+            
             reader.onload = function(e) {
                 try {
-                    const parsed = JSON.parse(e.target.result);
-                    if (parsed.nodes) state.nodes = parsed.nodes;
-                    if (parsed.edges) state.edges = parsed.edges;
-                    if (parsed.ui) state.ui = parsed.ui;
+                    const rawContent = e.target.result;
+                    const importedData = JSON.parse(rawContent);
+
+                    // Validar se tem a estrutura esperada minima
+                    if (!importedData.machines || !Array.isArray(importedData.machines)) {
+                        throw new Error("O ficheiro JSON não contém o formato válido de máquinas.");
+                    }
+
+                    // Carregar os dados para o state global
+                    state.machines = importedData.machines;
+                    if (importedData.edges) state.edges = importedData.edges;
+                    if (importedData.ui) state.ui = importedData.ui;
+
+                    // Guardar no localStorage e atualizar a interface
                     saveState();
                     render();
-                    if (state.ui.viewMode === 'detail' && state.ui.focusedMachine) {
-                        const node = state.nodes.find(n => n.id === state.ui.focusedMachine);
-                        if (node) {
-                            setTimeout(() => {
-                                centerOnNode(node);
-                                document.getElementById('btnReturnEagle').classList.remove('hidden');
-                            }, 50);
-                        }
-                    } else {
-                        document.getElementById('btnReturnEagle').classList.add('hidden');
-                    }
-                    closeModal('menuModal');
-                } catch (err) {
-                    alert('Invalid JSON file.');
+                    
+                    // Feedback visual de sucesso
+                    alert("Ficheiro importado com sucesso!");
+                } catch (error) {
+                    alert("Erro ao importar JSON: " + error.message);
+                } finally {
+                    // Limpa o input para permitir reimportar o mesmo ficheiro se necessário
+                    event.target.value = '';
                 }
             };
+
+            reader.onerror = function() {
+                alert("Erro ao ler o ficheiro no dispositivo.");
+                event.target.value = '';
+            };
+
             reader.readAsText(file);
         }
 
