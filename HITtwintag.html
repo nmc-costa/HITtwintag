@@ -130,11 +130,14 @@
                 <button onclick="exportData()" class="w-full text-left px-4 py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl font-medium text-sm flex items-center justify-between border border-slate-200">
                     <span id="exportText">Export Data (JSON)</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 </button>
-                <div class="mt-4">
+                <div class="mt-4 space-y-2">
                     <label class="w-full cursor-pointer text-left px-4 py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl font-medium text-sm flex items-center justify-between border border-slate-200">
-                        <span id="importText">Import Data</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        <span id="importText">Import from File</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                         <input type="file" id="importFile" accept="application/json,.json" onchange="importData(event)">
                     </label>
+                    <button onclick="openModal('pasteModal')" class="w-full text-left px-4 py-3 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl font-medium text-sm flex items-center justify-between border border-orange-200">
+                        <span id="pasteText">Paste JSON</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    </button>
                 </div>
                 <!-- Demo and Clear Data Buttons -->
                 <button onclick="loadDemoCase()" class="w-full text-left px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl font-medium text-sm flex items-center justify-between border border-blue-200 mt-4">
@@ -146,6 +149,22 @@
             </div>
             <div class="p-4 bg-slate-50 border-t border-slate-100">
                 <button onclick="closeModal('menuModal')" id="closeSettingsBtn" class="w-full py-3 bg-slate-800 text-white rounded-xl font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pasteModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md shadow-xl flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+                <h3 id="pasteTitle" class="font-bold text-lg text-slate-800">Paste JSON Data</h3>
+                <button onclick="closeModal('pasteModal')" class="text-slate-400 p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+            <div class="p-4 flex-1 overflow-y-auto">
+                <textarea id="jsonPasteArea" class="w-full h-64 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono text-xs resize-none" placeholder="Paste your JSON data here..."></textarea>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between gap-2">
+                <button onclick="closeModal('pasteModal')" id="cancelPasteBtn" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg">Cancel</button>
+                <button onclick="importFromPaste()" id="importPasteBtn" class="px-6 py-2 bg-orange-600 text-white rounded-lg font-bold hover:bg-orange-700">Import</button>
             </div>
         </div>
     </div>
@@ -214,7 +233,12 @@
                 metaValPlaceholder: "Value",
                 confirmClear: "Are you sure you want to delete all data?",
                 confirmDelMachine: "Delete this machine and its connections?",
-                eagleHint: "Tap to focus"
+                eagleHint: "Tap to focus",
+                import: "Import from File",
+                paste: "Paste JSON",
+                pasteTitle: "Paste JSON Data",
+                importPasteBtn: "Import",
+                cancelPasteBtn: "Cancel"
             },
             pt: {
                 addMachine: "Adicionar",
@@ -239,7 +263,12 @@
                 metaValPlaceholder: "Valor",
                 confirmClear: "Tem a certeza que quer apagar tudo?",
                 confirmDelMachine: "Remover esta máquina e as ligações?",
-                eagleHint: "Toque para abrir"
+                eagleHint: "Toque para abrir",
+                import: "Importar do Ficheiro",
+                paste: "Colar JSON",
+                pasteTitle: "Colar Dados JSON",
+                importPasteBtn: "Importar",
+                cancelPasteBtn: "Cancelar"
             }
         };
 
@@ -808,6 +837,10 @@
             document.getElementById('delMachineBtn').innerText = t('delete');
             document.getElementById('saveConfigBtn').innerText = t('save');
             document.getElementById('backMapText').innerText = t('backMap');
+            document.getElementById('pasteTitle').innerText = t('pasteTitle');
+            document.getElementById('pasteText').innerText = t('paste');
+            document.getElementById('importPasteBtn').innerText = t('importPasteBtn');
+            document.getElementById('cancelPasteBtn').innerText = t('cancelPasteBtn');
         }
 
         function exportData() {
@@ -826,6 +859,43 @@
             downloadAnchorNode.remove();
         }
 
+        function processImportedData(jsonText) {
+            try {
+                const parsed = JSON.parse(jsonText);
+                
+                if (!parsed.nodes || !Array.isArray(parsed.nodes)) {
+                    throw new Error(state.lang === 'pt' ? "Ficheiro inválido: estrutura 'nodes' em falta." : "Invalid file: missing 'nodes' structure.");
+                }
+
+                state.nodes = parsed.nodes;
+                if (parsed.edges) state.edges = parsed.edges;
+                if (parsed.ui) state.ui = parsed.ui;
+                
+                saveState();
+                render();
+                
+                if (state.ui.viewMode === 'detail' && state.ui.focusedMachine) {
+                    const node = state.nodes.find(n => n.id === state.ui.focusedMachine);
+                    if (node) {
+                        setTimeout(() => {
+                            centerOnNode(node);
+                            document.getElementById('btnReturnEagle').classList.remove('hidden');
+                        }, 50);
+                    }
+                } else {
+                    document.getElementById('btnReturnEagle').classList.add('hidden');
+                }
+                
+                closeModal('menuModal');
+                closeModal('pasteModal');
+                alert(state.lang === 'pt' ? "Dados importados com sucesso!" : "Data imported successfully!");
+                return true;
+            } catch (err) {
+                alert((state.lang === 'pt' ? "Erro ao importar: " : "Import error: ") + err.message);
+                return false;
+            }
+        }
+
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -833,44 +903,8 @@
             const reader = new FileReader();
             
             reader.onload = function(e) {
-                try {
-                    const parsed = JSON.parse(e.target.result);
-                    
-                    // Validação de segurança para a estrutura atual
-                    if (!parsed.nodes || !Array.isArray(parsed.nodes)) {
-                        throw new Error(state.lang === 'pt' ? "Ficheiro inválido: estrutura 'nodes' em falta." : "Invalid file: missing 'nodes' structure.");
-                    }
-
-                    // Carrega os dados
-                    state.nodes = parsed.nodes;
-                    if (parsed.edges) state.edges = parsed.edges;
-                    if (parsed.ui) state.ui = parsed.ui;
-                    
-                    saveState();
-                    render();
-                    
-                    // Restaura a Detail View se o JSON tiver sido exportado nesse estado
-                    if (state.ui.viewMode === 'detail' && state.ui.focusedMachine) {
-                        const node = state.nodes.find(n => n.id === state.ui.focusedMachine);
-                        if (node) {
-                            setTimeout(() => {
-                                centerOnNode(node);
-                                document.getElementById('btnReturnEagle').classList.remove('hidden');
-                            }, 50);
-                        }
-                    } else {
-                        document.getElementById('btnReturnEagle').classList.add('hidden');
-                    }
-                    
-                    closeModal('menuModal');
-                    alert(state.lang === 'pt' ? "Dados importados com sucesso!" : "Data imported successfully!");
-                    
-                } catch (err) {
-                    alert((state.lang === 'pt' ? "Erro ao importar: " : "Import error: ") + err.message);
-                } finally {
-                    // Limpa o input para permitir reimportar no Android
-                    event.target.value = '';
-                }
+                processImportedData(e.target.result);
+                event.target.value = '';
             };
 
             reader.onerror = function() {
@@ -879,6 +913,17 @@
             };
 
             reader.readAsText(file);
+        }
+
+        function importFromPaste() {
+            const jsonText = document.getElementById('jsonPasteArea').value.trim();
+            if (!jsonText) {
+                alert(state.lang === 'pt' ? "Cole o JSON antes de continuar." : "Please paste JSON data first.");
+                return;
+            }
+            if (processImportedData(jsonText)) {
+                document.getElementById('jsonPasteArea').value = '';
+            }
         }
 
         function loadDemoCase() {
@@ -908,6 +953,45 @@
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
         }
+
+        // --- Drag & Drop Support ---
+        const dropZone = document.getElementById('canvas-container');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.style.backgroundColor = 'rgba(99, 102, 241, 0.05)';
+            dropZone.style.borderRadius = '8px';
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.style.backgroundColor = '';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.style.backgroundColor = '';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type === 'application/json' || file.name.endsWith('.json')) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        processImportedData(evt.target.result);
+                    };
+                    reader.onerror = function() {
+                        alert(state.lang === 'pt' ? "Erro ao ler o ficheiro." : "Error reading file.");
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert(state.lang === 'pt' ? "Por favor, solte um ficheiro JSON." : "Please drop a JSON file.");
+                }
+            }
+        });
 
         window.addEventListener('resize', drawEdges);
         window.onload = loadState;
