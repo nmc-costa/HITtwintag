@@ -23,8 +23,11 @@ Built for **Data Scientists, Industrial Engineers, and Operators**, this tool br
 ## **🚀 Quick Start**
 
 1. Download or clone this repository.  
-2. Open the digital\_twin\_manual.html (or index.html if renamed) directly in your web browser (Chrome, Safari, Edge, Firefox).  
-3. Start mapping your production line\!
+2. Open the `HITtwintag.html` file directly in your web browser:
+   - **Desktop:** Chrome, Safari, Edge, Firefox
+   - **Android:** Chrome (tested & working)
+   - **iOS:** Safari
+3. Start mapping your production line!
 
 ## **💡 How to Use (Workflow)**
 
@@ -52,6 +55,8 @@ The app supports **three flexible import methods** to work seamlessly across all
 | **📋 Copy/Paste** | All platforms | Paste JSON text directly into a modal textarea. **Best for Android & unreliable file systems.** Opens a dedicated dialog box. |
 | **🎯 Drag & Drop** | Desktop (Chrome, Firefox, Edge) | Drag a JSON file directly onto the canvas. Quick and intuitive for desktop workflows. |
 
+> **⚠️ Android Chrome Note:** When using the File Picker on Android Chrome, navigate to your phone's internal **Downloads** folder. The "Transfers" or "Recent" folders may not work reliably. Save exported JSON files to the Download folder for best results.
+
 ### **Example Import Workflow (Android)**
 1. On your desktop, export the JSON via **"Export Data"**
 2. Share or copy the JSON text
@@ -60,7 +65,18 @@ The app supports **three flexible import methods** to work seamlessly across all
 5. Click **"Import"** to load your layout and data
 
 ---
+## **🔧 Troubleshooting & FAQs**
 
+### **Android File Picker Not Working?**
+- **Issue:** Clicking "Import from File" opens the file manager but selection doesn't work from "Transfers" or "Recent" folders.
+- **Solution:** Save your JSON files to your phone's internal **Downloads** folder (`/Download/`). This folder works reliably with Chrome's file picker on Android.
+- **Better Alternative:** Use the **"Paste JSON"** method instead—it works on all devices without file system limitations.
+
+### **Copy/Paste Not Working on My Device?**
+- Ensure you're using a modern browser (Chrome, Firefox, Safari, Edge).
+- Some older Android browsers may have limited clipboard access. Try copying the JSON text again.
+
+---
 ## **�📊 For Data Scientists**
 
 The main goal of this tool is to quickly generate structural labels and domain knowledge data that can be parsed by Python/Pandas for **Predictive Maintenance** or **Anomaly Detection** models.
